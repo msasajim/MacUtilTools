@@ -1,13 +1,31 @@
 #!/bin/sh
 
-if [ $# <> 1 ]; then
+if [ $# -ne 1 ]; then
 	echo "need full path of directory"
 	exit
 fi
 
-dirname = $1
-cd "${dirname}"
+LANG=ja_JP.UTF8
+logfile=~/Work/_logs/list_`date '+%Y%m%d_%H%M%S'`.log
 
-ls -l | while read line;
+# move directory
+dirname=$1
+cd $dirname
+
+
+# check each dir
+ls -l | grep -v total | while read line;
 do
-	
+	writer=`echo "${line}" | cut -d "[" -f2 | cut -d "]" -f1 | sed 's/／/\//g'`
+	author=`echo ${writer} | cut -d "/" -f2`
+	writer=`echo ${writer} | cut -d "/" -f1`
+	book=`echo "${line}" | cut -d "]" -f2 | cut -b 2-`
+
+	if [ $author != $writer ]; then
+		echo ${writer}\\t${author}\\t${book} >> $logfile
+	else
+		echo ${writer}\\t\\t${book} >> $logfile
+	fi
+done
+
+exit 0
