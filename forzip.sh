@@ -6,6 +6,7 @@ echo "check trash files..."
 find ./ -name "*.url" -print0 | xargs -0 rm
 find ./ -name "*.db" -print0 | xargs -0 rm
 find ./ -name "*.txt" -print0 | xargs -0 rm
+find ./ -name "*.rar" -print0 | xargs -0 rm
 find ./ -name ".DS_Store" -print0 | xargs -0 rm
 
 echo "start for zip"
