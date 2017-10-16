@@ -9,8 +9,8 @@ LANG=ja_JP.UTF8
 logfile=~/Work/_logs/list_`date '+%Y%m%d_%H%M%S'`.log
 
 # move directory
-dirname=$1
-cd $dirname
+dirname=`echo "${1}"`
+cd "${dirname}"
 
 
 # check each dir
