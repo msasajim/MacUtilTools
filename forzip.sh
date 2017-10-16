@@ -19,6 +19,8 @@ do
   # move to the directory
   echo "${f}"
   cd "${f}"
+  # delete folder
+  find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
   # rename file
   rename -v 's/[^0-9]*//' *
   # zip file
