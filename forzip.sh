@@ -13,7 +13,6 @@ find ./ -name ".DS_Store" -print0 | xargs -0 rm
 
 # process
 echo "start for zip"
-#for f in *; do echo "${f}"; cd "${f}"; rename -v 's/[^0-9]*//' *; zip -r ../"${f}.zip" * >/dev/null ; cd - >/dev/null; rm -r "${f}"; done
 for f in *;
 do
   # move to the directory
@@ -30,7 +29,6 @@ do
   # delete the directory
   rm -r "${f}"
 done
-
 
 # completed
 echo "finished."

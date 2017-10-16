@@ -16,7 +16,6 @@ echo "star process..."
 echo "target directory: ${dirname}"
 cd "${dirname}"
 
-
 # check each dir
 ls -l | grep -v total | while read line;
 do
