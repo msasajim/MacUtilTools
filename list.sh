@@ -5,11 +5,15 @@ if [ $# -ne 1 ]; then
 	exit
 fi
 
+# initialize
 LANG=ja_JP.UTF8
-logfile=~/Work/_logs/list_`date '+%Y%m%d_%H%M%S'`.log
+logdir=~/Work/_logs
+logfile="${logdir}"/list_`date '+%Y%m%d_%H%M%S'`.log
+dirname=`echo "${1}"`
 
 # move directory
-dirname=`echo "${1}"`
+echo "star process..."
+echo "target directory: ${dirname}"
 cd "${dirname}"
 
 
@@ -28,4 +32,5 @@ do
 	fi
 done
 
+echo "list output completed..."
 exit 0
