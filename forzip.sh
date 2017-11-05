@@ -10,6 +10,8 @@ find ./ -name "*.db" -print0 | xargs -0 rm
 find ./ -name "*.txt" -print0 | xargs -0 rm
 find ./ -name "*.rar" -print0 | xargs -0 rm
 find ./ -name ".DS_Store" -print0 | xargs -0 rm
+find ./ -name "単ページ" -print0 | xargs -0 rm -r
+find ./ -name "*.vix" -print0 | xargs -0 rm
 
 # process
 echo "start for zip"
