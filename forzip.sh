@@ -24,6 +24,9 @@ do
   find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
   # rename file
   rename -v 's/[^0-9]*//' *
+  # change filename to small capital
+  #for file in *; do cfile=`echo "${file}" | tr A-Z a-z`; mv "${file}" "${cfile}"; done
+  rename -c -f *
   # zip file
   zip -r ../"${f}.zip" * >/dev/null
   # back to the directory
