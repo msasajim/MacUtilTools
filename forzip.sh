@@ -28,6 +28,7 @@ do
   find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
   # rename file
   rename -v 's/[^0-9]*//' *
+  rename -s 'jpeg' 'jpg' *
   # change filename to small capital
   rename -c -f *
   # zip file
