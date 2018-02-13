@@ -5,12 +5,8 @@ echo $PWD
 
 # check trash files
 echo "check trash files..."
-find ./ -name "*.url" -print0 | xargs -0 rm
-find ./ -name "*.db" -print0 | xargs -0 rm
-find ./ -name "*.txt" -print0 | xargs -0 rm
-find ./ -name "*.rar" -print0 | xargs -0 rm
+find -E ./ -type f -iregex ".*\.(url|db|text|txt|vix|rar|zip)" -print0 | xargs -0 rm
 find ./ -name ".DS_Store" -print0 | xargs -0 rm
-find ./ -name "*.vix" -print0 | xargs -0 rm
 find ./ -name "*..*" -print0 | xargs -0 rm
 
 # check trach directories
