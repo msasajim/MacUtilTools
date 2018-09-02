@@ -7,9 +7,15 @@ fi
 
 # initialize
 LANG=ja_JP.UTF8
-logdir=~/Work/_logs
+logdir=~/work/_logs
+
+if [ ! -e "${logdir}" ]; then
+	mkdir -p "${logdir}"
+fi
+
 logfile="${logdir}"/list_`date '+%Y%m%d_%H%M%S'`.log
 dirname=`echo "${1}"`
+i=0
 
 # move directory
 echo "star process..."
@@ -19,15 +25,17 @@ cd "${dirname}"
 # check each dir
 ls -l | grep -v total | while read line;
 do
+	i=`expr $i + 1`
+	echo "$i: ${line}"
 	writer=`echo "${line}" | cut -d "[" -f2 | cut -d "]" -f1 | sed 's/／/\//g'`
-	author=`echo ${writer} | cut -d "/" -f2`
-	writer=`echo ${writer} | cut -d "/" -f1`
+	author=`echo "${writer}" | cut -d "/" -f2`
+	writer=`echo "${writer}" | cut -d "/" -f1`
 	book=`echo "${line}" | cut -d "]" -f2 | cut -b 2-`
 
-	if [ $author != $writer ]; then
-		echo ${writer}\\t${author}\\t${book} >> $logfile
+	if [ "${author}" != "${writer}" ]; then
+		echo "${writer}"\\t"${author}"\\t"${book}" >> $logfile
 	else
-		echo ${writer}\\t\\t${book} >> $logfile
+		echo "${writer}"\\t\\t"${book}" >> $logfile
 	fi
 done
 
