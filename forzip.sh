@@ -27,6 +27,7 @@ do
   rename -s 'jpeg' 'jpg' *
   rename -s " - p" "_" *
   rename -v "s/\ \[[A-Za-z0-9]*\]//" *
+  rename -v "s/imgs\-//" *
   # change filename to small capital
   rename -c -f *
   # zip file
