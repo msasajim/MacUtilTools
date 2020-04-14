@@ -3,6 +3,13 @@
 # initialize
 echo $PWD
 
+# check current directory
+#curDir=`basename $PWD`
+#if [ "${curDir}" != "_tmp" ]; then
+#  echo "ERROR: wrong directory. scripts must be executed under _tmp dir."
+#  exit 1
+#fi
+
 # check trash files
 echo "check trash files..."
 find -E ./ -type f -iregex ".*\.(url|db|text|txt|vix|rar|zip)" -print0 | xargs -0 rm
@@ -28,6 +35,7 @@ do
   rename -s " - p" "_" *
   rename -v "s/\ \[[A-Za-z0-9]*\]//" *
   rename -v "s/imgs\-//" *
+  rename -v "s/\ \-\ p/_/" *
   # change filename to small capital
   rename -c -f *
   # zip file
