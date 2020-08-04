@@ -12,7 +12,7 @@ echo $PWD
 
 # check trash files
 echo "check trash files..."
-find -E ./ -type f -iregex ".*\.(url|db|text|txt|vix|rar|zip)" -print0 | xargs -0 rm
+find -E ./ -type f -iregex ".*\.(url|db|text|txt|vix|rar|zip|ini)" -print0 | xargs -0 rm
 find ./ -name ".DS_Store" -print0 | xargs -0 rm
 find ./ -name "*..*" -print0 | xargs -0 rm
 
