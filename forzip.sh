@@ -32,6 +32,7 @@ do
   # rename file
   rename -v 's/[^0-9]*//' *
   rename -s 'jpeg' 'jpg' *
+  rename -s 'jpg.jpg' 'jpg' *
   rename -s " - p" "_" *
   rename -v "s/\ \[[A-Za-z0-9]*\]//" *
   rename -v "s/imgs\-//" *
