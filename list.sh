@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 
 if [ $# -ne 1 ]; then
 	echo "need full path of directory"
