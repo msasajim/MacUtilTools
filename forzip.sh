@@ -1,14 +1,14 @@
-#!/bin/sh
+#!/bin/zsh
 
 # initialize
 echo $PWD
 
-# check current directory
-#curDir=`basename $PWD`
-#if [ "${curDir}" != "_tmp" ]; then
-#  echo "ERROR: wrong directory. scripts must be executed under _tmp dir."
-#  exit 1
-#fi
+if [[ $PWD =~ ".?_tmp.?" ]]; then
+  echo "INFO: right directory: ${PWD}"
+else
+  echo "ERROR: wrong directory. scripts must be executed under _tmp dir. diretory is ${PWD}"
+  exit 1
+fi
 
 # check trash files
 echo "check trash files..."
@@ -47,6 +47,6 @@ do
   rm -r "${f}"
 done
 
-# completed
+# finalized
 echo "finished."
 exit 0
