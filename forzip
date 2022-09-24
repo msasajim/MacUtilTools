@@ -3,11 +3,20 @@
 # initialize
 echo $PWD
 
+# directory check
 if [[ $PWD =~ ".?_tmp.?" ]]; then
   echo "INFO: right directory: ${PWD}"
 else
   echo "ERROR: wrong directory. scripts must be executed under _tmp dir. diretory is ${PWD}"
   exit 1
+fi
+
+# argument check
+if [[ $1 =~ [Yy] ]]; then
+  echo "INFO: run rename digit mode"
+  mode="Y"
+else
+  echo "INFO: run normal mode"
 fi
 
 # check trash files
@@ -39,6 +48,11 @@ do
   rename -v "s/\ \-\ p/_/" *
   # change filename to small capital
   rename -c -f *
+  # rename digit
+  if [[ $mode == "Y" ]]; then
+    rename 's/(\d+)/sprintf("%03d", $1)/e' *
+  fi 
+
   # zip file
   zip -r ../"${f}.zip" * >/dev/null
   # back to the directory
