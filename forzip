@@ -39,7 +39,7 @@ echo "INFO: start for zip"
 for f in *;
 do
   # move to the directory
-  echo "INFO: working directory: ${f}"
+  echo "INFO: working: ${f}"
   cd "${f}"
   # delete folders
   find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
