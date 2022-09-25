@@ -7,7 +7,7 @@ echo $PWD
 if [[ $PWD =~ ".?_tmp.?" ]]; then
   echo "INFO: right directory: ${PWD}"
 else
-  echo "ERROR: wrong directory. scripts must be executed under _tmp dir. diretory is ${PWD}"
+  echo "ERROR: wrong directory. a script has to be executed under _tmp dir. diretory is ${PWD}"
   exit 1
 fi
 
