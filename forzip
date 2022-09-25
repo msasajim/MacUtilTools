@@ -12,29 +12,34 @@ else
 fi
 
 # argument check
-if [[ $1 =~ [Yy] ]]; then
-  echo "INFO: run rename digit mode"
-  mode="Y"
-else
+if [[ $# -eq 0 ]]; then
   echo "INFO: run normal mode"
+else
+  if [[ $1 =~ [Yy] ]]; then
+    echo "INFO: run rename digit mode"
+    mode="Y"
+  else
+    echo "ERROR: wrong argument."
+    exit 1
+  fi
 fi
 
 # check trash files
-echo "check trash files..."
+echo "INFO: check trash files..."
 find -E ./ -type f -iregex ".*\.(url|db|text|txt|vix|rar|zip|ini)" -print0 | xargs -0 rm
 find ./ -name ".DS_Store" -print0 | xargs -0 rm
 find ./ -name "*..*" -print0 | xargs -0 rm
 
 # check trach directories
-echo "check trash directories..."
+echo "INFO: check trash directories..."
 find ./ -name "単ページ" -print0 | xargs -0 rm -r
 
 # process
-echo "start for zip"
+echo "INFO: start for zip"
 for f in *;
 do
   # move to the directory
-  echo "${f}"
+  echo "INFO: working directory ${f}"
   cd "${f}"
   # delete folders
   find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
@@ -62,5 +67,5 @@ do
 done
 
 # finalized
-echo "finished."
+echo "INFO: finished."
 exit 0
