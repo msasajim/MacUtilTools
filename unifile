@@ -1,0 +1,26 @@
+#!/bin/zsh
+
+# initialize
+echo "INFO: current directory: ${PWD}"
+echo "INFO: check directories"
+if [ ! -d even ] || [ ! -d odd ]; then
+    "ERROR: directory: even or odd does not exist"
+    exit 1
+fi
+
+# move files to parent directory
+echo "INFO: move files from even"
+cd even
+mv * ../
+cd -
+rm -rf even
+
+echo "INFO: move files from odd"
+cd odd
+mv * ../
+cd -
+rm -rf odd
+
+# finalized
+echo "INFO: finished."
+exit 0

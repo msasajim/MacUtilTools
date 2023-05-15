@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+# initialize
+echo "INFO: current directory: ${PWD}"
+echo "INFO: create directories"
+mkdir -p even
+mkdir -p odd
+
+echo "INFO: distribute files to separate directories"
+for file in * ;
+    do
+        if [[ "${file}" == *[02468].* ]] ; then
+            mv "${file}" even
+        elif [[ "${file}" == *[013579].* ]] ; then
+            mv "${file}" odd
+        fi
+    done
+
+# finalized
+echo "INFO: finished."
+exit 0
