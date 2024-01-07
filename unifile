@@ -1,26 +1,23 @@
 #!/bin/zsh
 
-# initialize
+# Function to move files from a directory to parent directory and then remove the directory
+move_files_and_remove_dir() {
+    local dir=$1
+    echo "INFO: move files from ${dir}"
+    if [ -d "${dir}" ]; then
+        mv "${dir}"/* ../
+        rm -rf "${dir}"
+    else
+        echo "ERROR: directory: ${dir} does not exist"
+        exit 1
+    fi
+}
+
 echo "INFO: current directory: ${PWD}"
-echo "INFO: check directories"
-if [ ! -d even ] || [ ! -d odd ]; then
-    "ERROR: directory: even or odd does not exist"
-    exit 1
-fi
 
-# move files to parent directory
-echo "INFO: move files from even"
-cd even
-mv * ../
-cd -
-rm -rf even
+# Moving files from 'even' and 'odd' directories
+move_files_and_remove_dir even
+move_files_and_remove_dir odd
 
-echo "INFO: move files from odd"
-cd odd
-mv * ../
-cd -
-rm -rf odd
-
-# finalized
 echo "INFO: finished."
 exit 0

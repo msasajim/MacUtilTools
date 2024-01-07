@@ -1,21 +1,33 @@
 #!/bin/zsh
 
-# initialize
-echo "INFO: current directory: ${PWD}"
-echo "INFO: create directories"
-mkdir -p even
-mkdir -p odd
+# Function to create a directory if it doesn't exist
+create_directory() {
+    local dir=$1
+    if [ ! -d "${dir}" ]; then
+        mkdir -p "${dir}"
+    fi
+}
 
-echo "INFO: distribute files to separate directories"
-for file in * ;
-    do
+# Function to distribute files to 'even' or 'odd' directory based on their names
+distribute_files() {
+    for file in * ; do
         if [[ "${file}" == *[02468].* ]] ; then
-            mv "${file}" even
+            mv "${file}" even/
         elif [[ "${file}" == *[013579].* ]] ; then
-            mv "${file}" odd
+            mv "${file}" odd/
         fi
     done
+}
 
-# finalized
+echo "INFO: current directory: ${PWD}"
+
+# Create directories
+create_directory even
+create_directory odd
+
+# Distribute files
+echo "INFO: distribute files to separate directories"
+distribute_files
+
 echo "INFO: finished."
 exit 0
