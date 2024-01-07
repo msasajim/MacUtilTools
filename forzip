@@ -7,7 +7,7 @@ echo $PWD
 if [[ $PWD =~ ".?_tmp.?" ]]; then
   echo "INFO: right directory: ${PWD}"
 else
-  echo "ERROR: wrong directory. a script has to be executed under _tmp dir. diretory is ${PWD}"
+  echo "ERROR: wrong directory. a script has to be executed under _tmp dir. directory is ${PWD}"
   exit 1
 fi
 
@@ -24,46 +24,40 @@ else
   fi
 fi
 
-# check trash files
-echo "INFO: check trash files..."
-find -E ./ -type f -iregex ".*\.(url|db|text|txt|vix|rar|zip|ini)" -print0 | xargs -0 rm
-find ./ -name ".DS_Store" -print0 | xargs -0 rm
-find ./ -name "*..*" -print0 | xargs -0 rm
-
-# check trach directories
-echo "INFO: check trash directories..."
-find ./ -name "単ページ" -print0 | xargs -0 rm -r
+# check and remove trash files and directories in one go
+echo "INFO: check and remove trash files and directories..."
+find ./ -type f \( -iregex ".*\.(url|db|text|txt|vix|rar|zip|ini)" -o -name ".DS_Store" -o -name "*..*" \) -print0 | xargs -0 rm
+find ./ -type d -name "単ページ" -print0 | xargs -0 rm -r
 
 # process
 echo "INFO: start for zip"
-for f in *;
-do
-  # move to the directory
-  echo "INFO: working: ${f}"
-  cd "${f}"
-  # delete folders
-  find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
-  # rename file
-  rename -v 's/[^0-9]*//' *
-  rename -s 'jpeg' 'jpg' *
-  rename -s 'jpg.jpg' 'jpg' *
-  rename -s " - p" "_" *
-  rename -v "s/\ \[[A-Za-z0-9]*\]//" *
-  rename -v "s/imgs\-//" *
-  rename -v "s/\ \-\ p/_/" *
-  # change filename to small capital
-  rename -c -f *
-  # rename digit
-  if [[ $mode == "Y" ]]; then
-    rename 's/(\d+)/sprintf("%03d", $1)/e' *
-  fi 
+for dir in * ; do
+  echo "INFO: working: ${dir}"
+  
+    # rename and process files in the directory
+    pushd "${dir}" >/dev/null
+    # delete trash directory
+    find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
+    # rename filename
+    rename -v '
+    s/[^0-9]*//;
+    s/jpeg/jpg/;
+    s/jpg\.jpg/jpg/;
+    s/ \- p/_/;
+    s/\ \[[A-Za-z0-9]*\]//;
+    s/imgs\-//;
+    s/\ \-\ p/_/
+    ' *
+    rename -c -f *
+    if [[ $mode == "Y" ]]; then
+      rename 's/(\d+)/sprintf("%03d", $1)/e' *
+    fi 
 
-  # zip file
-  zip -r ../"${f}.zip" * >/dev/null
-  # back to the directory
-  cd - >/dev/null
-  # delete the directory
-  rm -r "${f}"
+
+#   # zip files
+   zip -j "../${dir}.zip" * >/dev/null
+   popd >/dev/null
+   rm -r "${dir}"
 done
 
 # finalized
