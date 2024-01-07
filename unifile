@@ -5,7 +5,7 @@ move_files_and_remove_dir() {
     local dir=$1
     echo "INFO: move files from ${dir}"
     if [ -d "${dir}" ]; then
-        mv "${dir}"/* ../
+        mv "${dir}"/* .
         rm -rf "${dir}"
     else
         echo "ERROR: directory: ${dir} does not exist"
