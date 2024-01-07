@@ -1,43 +1,52 @@
 #!/bin/zsh
 
-if [ $# -ne 1 ]; then
-	echo "need full path of directory"
-	exit
-fi
+# Function to check if the correct number of arguments is provided
+check_arguments() {
+    if [ $# -ne 1 ]; then
+        echo "ERROR: Need full path of directory"
+        exit 1
+    fi
+}
 
-# initialize
-LANG=ja_JP.UTF8
-logdir=~/work/_logs
+# Function to initialize environment and log file
+initialize_environment() {
+    export LANG=ja_JP.UTF8
+    local logdir=~/work/_logs
 
-if [ ! -e "${logdir}" ]; then
-	mkdir -p "${logdir}"
-fi
+    if [ ! -e "${logdir}" ]; then
+        mkdir -p "${logdir}"
+    fi
 
-logfile="${logdir}"/list_`date '+%Y%m%d_%H%M%S'`.log
-dirname=`echo "${1}"`
-i=0
+    logfile="${logdir}/list_$(date '+%Y%m%d_%H%M%S').csv"
+    echo "INFO: Log file: ${logfile}"
+}
 
-# move directory
-echo "star process..."
-echo "target directory: ${dirname}"
-cd "${dirname}"
+# Function to process directory contents
+process_directory() {
+    local dirname=$1
+    local i=0
 
-# check each dir
-ls -l | grep -v total | while read line;
-do
-	i=`expr $i + 1`
-	echo "$i: ${line}"
-	writer=`echo "${line}" | cut -d "[" -f2 | cut -d "]" -f1 | sed 's/／/\//g'`
-	author=`echo "${writer}" | cut -d "/" -f2`
-	writer=`echo "${writer}" | cut -d "/" -f1`
-	book=`echo "${line}" | cut -d "]" -f2 | cut -b 2-`
+    echo "INFO: Start process..."
+    echo "INFO: Target directory: ${dirname}"
+    cd "${dirname}" || exit
 
-	if [ "${author}" != "${writer}" ]; then
-		echo "${writer}"\\t"${author}"\\t"${book}" >> $logfile
-	else
-		echo "${writer}"\\t\\t"${book}" >> $logfile
-	fi
-done
+    ls -l | grep -v total | while read line; do
+        i=$((i + 1))
+        writer=`echo "${line}" | cut -d "[" -f2 | cut -d "]" -f1 | sed 's/／/\//g'`
+	    author=`echo "${writer}" | cut -d "/" -f2`
+	    writer=`echo "${writer}" | cut -d "/" -f1`
+	    book=`echo "${line}" | cut -d "]" -f2 | cut -b 2-`
 
-echo "list output completed..."
-exit 0
+        if [ "${author}" != "${writer}" ]; then
+            echo "${writer}"\\t"${author}"\\t"${book}" >> $logfile
+        else
+            echo "${writer}"\\t\\t"${book}" >> $logfile
+        fi
+    done
+
+	echo "INFO: Completed."
+}
+
+check_arguments "$@"
+initialize_environment
+process_directory "$1"
