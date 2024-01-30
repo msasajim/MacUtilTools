@@ -1,33 +1,23 @@
 #!/bin/zsh
 
+# Initial check
+init(){
+    ! command -v gxargs >/dev/null && { echo "ERROR: 'gxargs' command is not installed."; exit 1; }
+}
+
 # Function to create a directory if it doesn't exist
 create_directory() {
-    local dir=$1
-    if [ ! -d "${dir}" ]; then
-        mkdir -p "${dir}"
-    fi
+    mkdir -p "$1"
 }
 
 # Function to distribute files to 'even' or 'odd' directory based on their names
 distribute_files() {
-    for file in * ; do
-        if [[ "${file}" == *[02468].* ]] ; then
-            mv "${file}" even/
-        elif [[ "${file}" == *[013579].* ]] ; then
-            mv "${file}" odd/
-        fi
-    done
+    find . -maxdepth 1 -type f -name '*[02468].*' -print0 | gxargs -0 -I {} -P 4 mv {} even/
+    find . -maxdepth 1 -type f -name '*[13579].*' -print0 | gxargs -0 -I {} -P 4 mv {} odd/
 }
 
-echo "INFO: current directory: ${PWD}"
-
-# Create directories
+# Main Process
 create_directory even
 create_directory odd
-
-# Distribute files
-echo "INFO: distribute files to separate directories"
 distribute_files
-
-echo "INFO: finished."
 exit 0

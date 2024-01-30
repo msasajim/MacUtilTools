@@ -17,7 +17,7 @@ initialize_environment() {
         mkdir -p "${logdir}"
     fi
 
-    logfile="${logdir}/list_$(date '+%Y%m%d_%H%M%S').csv"
+    logfile="${logdir}/`basename ${1}`_$(date '+%Y%m%d_%H%M%S').csv"
     echo "INFO: Log file: ${logfile}"
 }
 
@@ -26,7 +26,6 @@ process_directory() {
     local dirname=$1
     local i=0
 
-    echo "INFO: Start process..."
     echo "INFO: Target directory: ${dirname}"
     cd "${dirname}" || exit
 
@@ -43,10 +42,11 @@ process_directory() {
             echo "${writer}"\\t\\t"${book}" >> $logfile
         fi
     done
-
-	echo "INFO: Completed."
 }
 
+echo "INFO: Execution started."
 check_arguments "$@"
-initialize_environment
+initialize_environment "$1"
 process_directory "$1"
+echo "INFO: Execution completed."
+exit 0

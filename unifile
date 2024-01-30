@@ -3,21 +3,11 @@
 # Function to move files from a directory to parent directory and then remove the directory
 move_files_and_remove_dir() {
     local dir=$1
-    echo "INFO: move files from ${dir}"
-    if [ -d "${dir}" ]; then
-        mv "${dir}"/* .
-        rm -rf "${dir}"
-    else
-        echo "ERROR: directory: ${dir} does not exist"
-        exit 1
-    fi
+    mv "${dir}"/* . 2>/dev/null || { echo "ERROR: directory: ${dir} does not exist"; exit 1; }
+    rm -rf "${dir}"
 }
 
-echo "INFO: current directory: ${PWD}"
-
-# Moving files from 'even' and 'odd' directories
+# Main Process
 move_files_and_remove_dir even
 move_files_and_remove_dir odd
-
-echo "INFO: finished."
 exit 0
