@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/zsh -v
 
 # Argument and initial checks
 init() {
@@ -25,7 +25,8 @@ process() {
     pushd "$dir" >/dev/null
     find . -maxdepth 1 -type d -delete
     rename -v "s/[^0-9]*//; s/jpeg/jpg/; s/jpg\.jpg/jpg/; s/ \- p/_/; s/\ \[[A-Za-z0-9]*\]//; s/imgs\-//; s/\ \-\ p/_/" *
-    [[ "$mode" == "R" ]] && rename "s/(\d+)/sprintf("%03d", $1)/e" *
+    echo "hoge"
+    rename "s/(\d+)/sprintf(\"%03d\", \$1)/e" *
     zip -j "../${dir}.zip" * >/dev/null
     popd >/dev/null
     rm -r "$dir"
