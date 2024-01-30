@@ -1,31 +1,19 @@
 #!/bin/zsh
 
-# Function to remove non-numeric characters from filenames
-remove_non_numeric() {
-    echo "Removing non-numeric characters from filenames..."
-    rename -v 's/[^0-9]*//' *
-}
+# Combined function to optimize renaming operations
+optimize_rename_operations() {
+  # Combine non-numeric character removal and number formatting
+  rename -v 's/[^0-9]*//; s/(\d+)/sprintf("%03d", $1)/e' *
 
-# Function to format numbers in filenames to three-digit format
-format_numbers() {
-    echo "Formatting numbers in filenames to three-digit format..."
-    rename 's/(\d+)/sprintf("%03d", $1)/e' *
-}
-
-# Function to change specific pattern in filenames
-change_pattern() {
-    pattern_from="_01"
-    pattern_to="_02b"
-    echo "Changing pattern from '${pattern_from}' to '${pattern_to}' in filenames..."
-    rename -v "s/${pattern_from}/${pattern_to}/" *
+  # Change specific pattern in filenames
+  pattern_from="_01"
+  pattern_to="_02b"
+  if ls *"${pattern_from}"* 1> /dev/null 2>&1; then
+      echo "INFO: Changing pattern from '${pattern_from}' to '${pattern_to}' in filenames."
+      rename -v "s/${pattern_from}/${pattern_to}/" *
+  fi
 }
 
 # Main execution
-main() {
-    echo "Current Directory: $PWD"
-    remove_non_numeric
-    format_numbers
-    change_pattern
-}
-
-main "$@"
+optimize_rename_operations
+exit 0
