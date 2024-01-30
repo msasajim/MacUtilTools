@@ -5,6 +5,7 @@ init() {
   [[ $# -ne 1 ]] && { echo "ERROR: Incorrect number of arguments. Two arguments required."; exit 1; }
   [[ ! $PWD =~ "_tmp" ]] && { echo "ERROR: Script should be run in a directory containing '_tmp'."; exit 1; }
   ! command -v rename >/dev/null && { echo "ERROR: 'rename' command is not installed."; exit 1; }
+  ! command -v gxargs >/dev/null && { echo "ERROR: 'gxargs' command is not installed."; exit 1; }
   [[ $1 =~ [Rr] ]] && mode=${(U)1:0:1}
   echo "INFO: Script execution started."
 }
@@ -15,24 +16,22 @@ cleanup() {
   find . -type f \( -iregex ".*\.(url|db|text|txt|vix|rar|zip|ini)" -o -name ".DS_Store" -o -name "*..*" \) -o -type d -name "単ページ" -exec rm -r {} +
 }
 
-# Main process
+# Main processing with parallelism
 process() {
   echo "INFO: Starting processing"
-  for dir in *; do
-    [[ -d "$dir" ]] && {
-      echo "INFO: Processing: $dir"
-      pushd "$dir" >/dev/null
-      find . -maxdepth 1 -type d -delete
-      rename -v 's/[^0-9]*//; s/jpeg/jpg/; s/jpg\.jpg/jpg/; s/ \- p/_/; s/\ \[[A-Za-z0-9]*\]//; s/imgs\-//; s/\ \-\ p/_/' *
-      [[ "$mode" == "R" ]] && rename 's/(\d+)/sprintf("%03d", $1)/e' *
-      zip -j "../${dir}.zip" * >/dev/null
-      popd >/dev/null
-      rm -r "$dir"
-    }
-  done
+  find . -maxdepth 1 -mindepth 1 -type d -print0 | gxargs -0 -P 4 -I {} zsh -c '
+    dir="${1}"
+    echo "INFO: Processing $dir"
+    pushd "$dir" >/dev/null
+    find . -maxdepth 1 -type d -delete
+    rename -v "s/[^0-9]*//; s/jpeg/jpg/; s/jpg\.jpg/jpg/; s/ \- p/_/; s/\ \[[A-Za-z0-9]*\]//; s/imgs\-//; s/\ \-\ p/_/" *
+    [[ "$mode" == "R" ]] && rename "s/(\d+)/sprintf("%03d", $1)/e" *
+    zip -j "../${dir}.zip" * >/dev/null
+    popd >/dev/null
+    rm -r "$dir"
+  ' _ {}
 }
 
-# Main execution flow
 init "$@"
 cleanup
 process
