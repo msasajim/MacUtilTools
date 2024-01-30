@@ -1,0 +1,126 @@
+#!/bin/zsh -v
+
+# argument check
+init_argument() {
+  if [[ $# -ne 2 ]]; then
+    echo "ERROR: # of argument error. you need to 2 arguments."
+    exit 1
+  else
+    if [[ $2 =~ [Yy] ]]; then
+      echo "INFO: run rename digit mode."
+      mode="Y"
+    else
+      echo "INFO: run non-rename mode."
+    fi
+  fi
+}
+
+# initialize
+init_check() {
+  echo $PWD
+
+  # directory check
+  if [[ $PWD =~ ".?_tmp.?" ]]; then
+    echo "INFO: right directory: ${PWD}"
+  else
+    echo "ERROR: wrong directory. a script has to be executed under _tmp dir. directory is ${PWD}."
+    exit 1
+  fi
+
+  # command check
+  if ! command -v rename > /dev/null; then
+    echo "ERROR: rename commmand not installed. you need to install before you run."
+    exit 1
+  fi
+}
+
+# check and remove trash files and directories in one go
+pre_process() {
+  echo "INFO: check and remove trash files and directories..."
+  find ./ -type f \( -iregex ".*\.(url|db|text|txt|vix|rar|zip|ini)" -o -name ".DS_Store" -o -name "*..*" \) -print0 | xargs -0 rm
+  find ./ -type d -name "単ページ" -print0 | xargs -0 rm -r
+}
+
+# process
+main_process() {
+  echo "INFO: start for zip"
+  for dir in * ; do
+    echo "INFO: working: ${dir}"
+    
+      # rename and process files in the directory
+      pushd "${dir}" >/dev/null
+      # delete trash directory
+      find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
+      # rename filename
+      rename -v '
+      s/[^0-9]*//;
+      s/jpeg/jpg/;
+      s/jpg\.jpg/jpg/;
+      s/ \- p/_/;
+      s/\ \[[A-Za-z0-9]*\]//;
+      s/imgs\-//;
+      s/\ \-\ p/_/
+      ' *
+      rename -c -f *
+      if [[ $mode == "Y" ]]; then
+        rename 's/(\d+)/sprintf("%03d", $1)/e' *
+      fi 
+
+    # zip files
+    zip -j "../${dir}.zip" * >/dev/null
+    popd >/dev/null
+    rm -r "${dir}"
+
+  done
+}
+
+#exec option1
+normal() {
+  echo "INFO: run normal mode."
+  main_process
+}
+
+#exec option2
+ren() {
+  echo "INFO: run rename mode."
+  rename -v 's/[^0-9]*//g' *
+  main_process
+}
+
+full(){
+  echo "INFO: run full rename mode."
+  for d in *; do 
+      if [ -d "$d" ]; then
+          echo "INFO: working: ${d}"
+          cd "${d}"
+
+          # rename コマンドの実行
+          rename -v 's/[^0-9]*//g' *
+
+          # ファイル名変更と移動
+          for f in *; do
+            mv "${f}" "${d} 第${f}巻"
+          done
+
+          # forzip コマンドの実行
+          main_process
+
+          # move back
+          cd ../
+      fi
+  done
+}
+
+# execution
+init_argument "$@"
+init_check
+pre_process
+case $1 in
+  normal) normal ;;
+  ren) ren ;;
+  full) full ;;
+  *) echo "ERROR: wrong argument. you need to argue 1, 2 or 3." ;;
+esac
+
+echo "INFO: finished."
+exit 0
