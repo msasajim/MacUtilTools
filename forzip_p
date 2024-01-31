@@ -2,7 +2,7 @@
 
 # Argument and initial checks
 init() {
-  [[ $# -ne 1 ]] && { echo "ERROR: Incorrect number of arguments. Two arguments required."; exit 1; }
+  [[ $# -ne 1 ]] && { echo "ERROR: Incorrect number of arguments. An argument, R or N, is required."; exit 1; }
   [[ ! $PWD =~ "_tmp" ]] && { echo "ERROR: Script should be run in a directory containing '_tmp'."; exit 1; }
   ! command -v rename >/dev/null && { echo "ERROR: 'rename' command is not installed."; exit 1; }
   ! command -v gxargs >/dev/null && { echo "ERROR: 'gxargs' command is not installed."; exit 1; }
