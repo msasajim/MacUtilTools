@@ -12,11 +12,7 @@ check_arguments() {
 initialize_environment() {
     export LANG=ja_JP.UTF8
     local logdir=~/work/_logs
-
-    if [ ! -e "${logdir}" ]; then
-        mkdir -p "${logdir}"
-    fi
-
+    mkdir -p "${logdir}"
     logfile="${logdir}/`basename ${1}`_$(date '+%Y%m%d_%H%M%S').csv"
     echo "INFO: Log file: ${logfile}"
 }
@@ -24,24 +20,33 @@ initialize_environment() {
 # Function to process directory contents
 process_directory() {
     local dirname=$1
-    local i=0
-
     echo "INFO: Target directory: ${dirname}"
-    cd "${dirname}" || exit
+    cd "${dirname}" || exit 1
 
-    ls -l | grep -v total | while read line; do
-        i=$((i + 1))
-        writer=`echo "${line}" | cut -d "[" -f2 | cut -d "]" -f1 | sed 's/／/\//g'`
-	    author=`echo "${writer}" | cut -d "/" -f2`
-	    writer=`echo "${writer}" | cut -d "/" -f1`
-	    book=`echo "${line}" | cut -d "]" -f2 | cut -b 2-`
-
-        if [ "${author}" != "${writer}" ]; then
-            echo "${writer}"\\t"${author}"\\t"${book}" >> $logfile
-        else
-            echo "${writer}"\\t\\t"${book}" >> $logfile
+    # 現在のディレクトリ内のフォルダをループ処理
+    for dir in */ ; do
+        # フォルダ名からトリムする
+        dir=${dir%/}
+        
+        # 正規表現を使用してフォルダ名を解析
+        if [[ "$dir" =~ "\[(.+)\]\ (.+)" ]]; then
+            author="${match[1]}"
+            title="${match[2]}"
+            
+            # 作者と原作者を分割
+            if [[ $author =~ "(.+)／(.+)" ]]; then
+                author_name="${match[1]}"
+                original_author="${match[2]}"
+            else
+                author_name="$author"
+                original_author=""
+            fi
+            
+            # TSV形式で出力
+            echo "$author_name\t$original_author\t$title" >> "$logfile"
         fi
     done
+    cd -
 }
 
 echo "INFO: Execution started."
