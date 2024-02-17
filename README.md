@@ -1,62 +1,62 @@
 # My Shell Script Tools
 
-# forzip
-## Overview
+## forzip
+### Overview
 This script is designed for efficient file processing and archiving in a `_tmp` directory. 
 It has been enhanced with parallel processing capabilities to improve execution speed.
 
-## Requirements
+### Requirements
 - Zsh Shell
 - `rename` command
 
-## Installation
+### Installation
 Download the script and make it executable:
 ```bash
 chmod +x forzip
 ```
-## Usage
+### Usage
 Run the script with two arguments:
 ```bash
 ./forzip [mode]
 ```
 [mode]: R for rename digit mode OR any character for normal mode.
 
-# forzip_p
-## Overview
+## forzip_p
+### Overview
 This script is designed for efficient file processing and archiving in a `_tmp` directory. 
 It has been enhanced with parallel processing capabilities to improve execution speed.
 
-## Requirements
+### Requirements
 - Zsh Shell
 - `rename` command
 - `gxargs` command
 
-## Installation
+### Installation
 Download the script and make it executable:
 ```bash
 chmod +x forzip_p
 ```
-## Usage
+### Usage
 Run the script with two arguments:
 ```bash
 ./forzip_p [mode]
 ```
 [mode]: R for rename digit mode OR any character for normal mode.
 
-# redigit
-## Overview
+## redigit
+### Overview
 This script, `redigit`, is designed for efficient file manipulation, primarily focusing on renaming and reorganizing files within a specific directory structure.
 
-## Requirements
+### Requirements
 - A Unix-like environment with a shell interpreter.
 - Necessary tools and commands installed (as required by the script's operations).
 
-## Installation
+### Installation
 Place the `redigit` script in a desired directory. Make sure it is executable:
 ```bash
 chmod +x redigit
 ```
-## Usage
+### Usage
 To use the script, navigate to the directory where the script is located and execute it with appropriate arguments:
 ```bash
 ./redigit
