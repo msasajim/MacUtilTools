@@ -39,7 +39,7 @@ chmod +x forzip_p
 ## Usage
 Run the script with two arguments:
 ```bash
-./forzip [mode]
+./forzip_p [mode]
 ```
 [mode]: R for rename digit mode OR any character for normal mode.
 
