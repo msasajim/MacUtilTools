@@ -2,16 +2,22 @@
 
 # Combined function to optimize renaming operations
 optimize_rename_operations() {
-  # Combine non-numeric character removal and number formatting
-  rename -v 's/[^0-9]*//; s/(\d+)/sprintf("%03d", $1)/e' *
+  # Combine non-numeric character removal, number formatting, and specific pattern change in filenames
+  local pattern_from="_01"
+  local pattern_to="_02b"
+  
+  # Apply non-numeric character removal and number formatting to all files
+  rename 's/[^0-9]*//; s/(\d+)/sprintf("%03d", $1)/e' *
 
-  # Change specific pattern in filenames
-  pattern_from="_01"
-  pattern_to="_02b"
-  if ls *"${pattern_from}"* 1> /dev/null 2>&1; then
-      echo "INFO: Changing pattern from '${pattern_from}' to '${pattern_to}' in filenames."
-      rename -v "s/${pattern_from}/${pattern_to}/" *
-  fi
+  # Check if files with specific pattern exist and apply pattern change
+  for file in *"${pattern_from}"*; do
+    # Check if the file variable is actually a file and not the glob pattern itself
+    if [[ -f "$file" ]]; then
+      rename "s/${pattern_from}/${pattern_to}/" "$file"
+    else
+      break # Exit the loop if no files match the pattern
+    fi
+  done
 }
 
 # Main execution
