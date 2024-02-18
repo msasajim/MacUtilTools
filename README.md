@@ -48,7 +48,7 @@ Run the script with two arguments:
 This script, `redigit`, is designed for efficient file manipulation, primarily focusing on renaming and reorganizing files within a specific directory structure.
 
 ### Requirements
-- A Unix-like environment with a shell interpreter.
+- Zsh shell
 - Necessary tools and commands installed (as required by the script's operations).
 
 ### Installation
@@ -60,4 +60,23 @@ chmod +x redigit
 To use the script, navigate to the directory where the script is located and execute it with appropriate arguments:
 ```bash
 ./redigit
+```
+
+## list
+### Overview
+This script, `list`, is designed for creating a list with a specific directory.
+
+### Requirements
+- Zsh
+- Specify the log directory, ~/work/_logsn as a default directory.
+
+### Installation
+Place the `list` script in a desired directory. Make sure it is executable:
+```bash
+chmod +x list
+```
+### Usage
+To use the script, navigate to the directory where the script is located and execute it with appropriate arguments:
+```bash
+./list [fullpath direcotry]
 ```
