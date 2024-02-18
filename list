@@ -2,10 +2,7 @@
 
 # Function to check if the correct number of arguments is provided
 check_arguments() {
-    if [ $# -ne 1 ]; then
-        echo "ERROR: Need full path of directory"
-        exit 1
-    fi
+    [[ $# -ne 1 ]] && { echo "ERROR: Need full path of directory"; exit 1 }
 }
 
 # Function to initialize environment and log file
