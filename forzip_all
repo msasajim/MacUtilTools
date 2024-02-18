@@ -52,7 +52,7 @@ main_process() {
       # delete trash directory
       find . -maxdepth 1 -mindepth 1 -type d -print0 | xargs -0 rm -r
       # rename filename
-      rename -v '
+      rename '
       s/[^0-9]*//;
       s/jpeg/jpg/;
       s/jpg\.jpg/jpg/;
