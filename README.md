@@ -68,7 +68,7 @@ This script, `list`, is designed for creating a list with a specific directory.
 
 ### Requirements
 - Zsh
-- Specify the log directory, ~/work/_logsn as a default directory.
+- Specify the log directory, ~/work/_logs as a default directory.
 
 ### Installation
 Place the `list` script in a desired directory. Make sure it is executable:
